@@ -1,10 +1,10 @@
-name: biblios-sn2-2025
+name: My Manga Library
 
 services:
   ###> doctrine/doctrine-bundle ###
   database:
     image: bitnami/mariadb:10.6.20
-    container_name: biblios-sn2-2025-database
+    container_name: my-manga-library-database
     environment:
       - MARIADB_ROOT_PASSWORD=${MARIADB_ROOT_PASSWORD:-root_password}
       - MARIADB_USER=${MARIADB_USER:-app}
@@ -13,7 +13,7 @@ services:
     volumes:
       - database_data:/bitnami/mariadb
     networks:
-      - biblios-sn2-2025_network
+      - my-manga-library_network
     ports:
       - 3306:3306
     restart: unless-stopped
@@ -21,7 +21,7 @@ services:
 
   phpmyadmin:
     image: phpmyadmin:5.2.1
-    container_name: biblios-sn2-2025-phpmyadmin
+    container_name: my-manga-library-phpmyadmin
     ports:
       - 8080:80
     environment:
@@ -32,14 +32,14 @@ services:
     depends_on:
       - database
     networks:
-      - biblios-sn2-2025_network
+      - my-manga-library_network
     restart: unless-stopped
 
   apache:
     build:
       context: .
       dockerfile: ./Dockerfile
-    container_name: biblios-sn2-2025-apache
+    container_name: my-manga-library-apache
     volumes:
       - .:/var/www/
       - ./docker/apache/apache.conf:/etc/apache2/sites-enabled/000-default.conf
@@ -50,11 +50,11 @@ services:
     depends_on:
       - database
     networks:
-      - biblios-sn2-2025_network
+      - my-manga-library_network
     restart: unless-stopped
 
 networks:
-  biblios-sn2-2025_network:
+  my-manga-library_network:
     driver: bridge
 
 volumes:
