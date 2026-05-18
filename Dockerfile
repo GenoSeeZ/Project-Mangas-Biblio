@@ -45,6 +45,17 @@ ADD docker/apache/entrypoint.sh /entrypoint.sh
 RUN chmod a+x /entrypoint.sh && \
     a2enmod rewrite remoteip ssl
 
+# Copy project files
+COPY . /var/www
+
+# Install dependencies
+RUN composer install --no-dev --optimize-autoloader
+
+# Run migrations
+RUN php bin/console doctrine:migrations:migrate --no-interaction --env=prod || true
+
+# Set permissions
+RUN chown -R www-data:www-data /var/www
 CMD ["/entrypoint.sh"]
 
 EXPOSE 80
