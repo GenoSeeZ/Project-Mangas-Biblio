@@ -1,0 +1,50 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mangas{% endblock %}
+
+{% block body %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="fw-bold">Catalogue de mangas</h2>
+    {% if is_granted('ROLE_ADMIN') %}
+        <a href="{{ path('app_manga_new') }}" class="btn btn-primary">+ Ajouter un manga</a>
+    {% endif %}
+</div>
+
+{% if mangas is empty %}
+    <div class="text-center text-muted py-5">
+        <p>Aucun manga dans le catalogue pour le moment.</p>
+    </div>
+{% else %}
+    <div class="row row-cols-1 row-cols-md-4 g-4">
+        {% for manga in mangas %}
+        <div class="col">
+            <div class="card h-100 shadow-sm">
+                {% if manga.coverImage %}
+                    <img src="{{ manga.coverImage }}" class="card-img-top" alt="{{ manga.title }}"
+                         style="height: 280px; object-fit: cover;">
+                {% endif %}
+                <div class="card-body">
+                    <h5 class="card-title">{{ manga.title }}</h5>
+                    <p class="text-muted small mb-1">{{ manga.author }} · {{ manga.releaseYear }}</p>
+                    <p class="card-text small text-truncate">{{ manga.description }}</p>
+                    <div class="mb-2">
+                        {% for genre in manga.genres %}
+                            <span class="badge bg-secondary me-1">{{ genre }}</span>
+                        {% endfor %}
+                    </div>
+                    <span class="badge {% if manga.status == 'completed' %}bg-success{% elseif manga.status == 'ongoing' %}bg-primary{% else %}bg-warning text-dark{% endif %}">
+                        {{ manga.status }}
+                    </span>
+                </div>
+                <div class="card-footer d-flex gap-2">
+                    <a href="{{ path('app_manga_show', {'id': manga.id}) }}" class="btn btn-outline-primary btn-sm flex-grow-1">Voir</a>
+                    {% if is_granted('ROLE_ADMIN') %}
+                        <a href="{{ path('app_manga_edit', {'id': manga.id}) }}" class="btn btn-outline-secondary btn-sm">Edit</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+{% endif %}
+{% endblock %}

@@ -13,7 +13,7 @@
 
 <nav class="navbar navbar-expand-lg navbar-white bg-white shadow-sm">
     <div class="container">
-        <a class="navbar-brand fw-bold text-primary" href="/">
+        <a class="navbar-brand fw-bold text-primary" href="{{ path('app_home') }}">
             Bibliothèque de mangas
         </a>
 
@@ -23,8 +23,34 @@
         </button>
 
         <div class="collapse navbar-collapse" id="mainNav">
-            <ul class="navbar-nav ms-auto">
-                {# TODO Poner los links #}
+            <ul class="navbar-nav ms-auto align-items-center gap-2">
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ path('app_manga_index') }}">Mangas</a>
+                </li>
+
+                {% if app.user %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ path('app_library_index') }}">Ma bibliothèque</a>
+                    </li>
+                    {% if is_granted('ROLE_ADMIN') %}
+                    <li class="nav-item">
+                        <a class="nav-link text-warning" href="{{ path('app_manga_new') }}">+ Ajouter manga</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ path('app_profile') }}">Mon profil</a>
+                    </li>
+                    {% endif %}
+                    <li class="nav-item">
+                        <a class="btn btn-outline-danger btn-sm" href="{{ path('app_logout') }}">Déconnexion</a>
+                    </li>
+                {% else %}
+                    <li class="nav-item">
+                        <a class="btn btn-outline-primary btn-sm" href="{{ path('app_login') }}">Connexion</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="btn btn-primary btn-sm" href="{{ path('app_register') }}">S'inscrire</a>
+                    </li>
+                {% endif %}
             </ul>
         </div>
     </div>

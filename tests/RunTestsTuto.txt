@@ -1,0 +1,2 @@
+In order to run the tests : docker-compose exec apache php bin/phpunit tests/Entity/
+Or docker-compose exec apache php bin/phpunit tests/Controller/MangaControllerTest.php (for example. etc...)
