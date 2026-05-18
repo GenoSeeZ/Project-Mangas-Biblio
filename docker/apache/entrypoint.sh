@@ -10,5 +10,9 @@ if [[ "$OWNER_GID" != "0" ]]; then
     groupmod -o --gid ${OWNER_GID} www-data || echo "Warning: Failed to set GID for www-data"
 fi
 
+# Fix MPM conflict
+a2dismod mpm_event mpm_worker || true
+a2enmod mpm_prefork || true
+
 echo "Starting Apache as www-data (UID: ${OWNER_UID}, GID: ${OWNER_GID})"
 exec apache2-foreground
